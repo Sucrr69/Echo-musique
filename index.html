@@ -489,8 +489,9 @@ function seekTo(sec){
   E.offset = Math.min(Math.max(0, sec), d - .1);
   if (AU.dataset.id == tr.id) AU.currentTime = E.offset;
 }
-AU.addEventListener('ended', () => { if (E.playing) onEnded(); });
-AU.addEventListener('pause', () => { if (E.playing && AU.paused){ E.offset = AU.currentTime; E.playing = false; updateMedia(); refresh(); } });
+// At the end of a file the browser fires "pause" and then "ended": the pause must not be taken for the user stopping playback
+AU.addEventListener('ended', () => { if (byId(+AU.dataset.id)) onEnded(); });
+AU.addEventListener('pause', () => { if (AU.ended) return; if (E.playing && AU.paused){ E.offset = AU.currentTime; E.playing = false; updateMedia(); refresh(); } });
 AU.addEventListener('loadedmetadata', () => {
   const t = byId(+AU.dataset.id);
   if (t && !(t.duration > 0) && isFinite(AU.duration)){ t.duration = t.rec.duration = AU.duration; DB.put(t.rec).catch(() => {}); refresh(); }
