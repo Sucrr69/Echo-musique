@@ -1,5 +1,5 @@
 // Écho Musique : cache pour fonctionner hors ligne
-const VERSION = 'echo-v1';
+const VERSION = 'echo-v2';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
